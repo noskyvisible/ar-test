@@ -171,101 +171,161 @@
             
             try {
                 // Clear old state
-                log('Clearing old state...');
-                if (renderer && renderer.domElement && renderer.domElement.parentNode) {
-                    renderer.domElement.parentNode.removeChild(renderer.domElement);
-                }
-                log('✓ State cleared');
-                
-                log('Initializing Three.js...');
-                // Scene setup
-                scene = new THREE.Scene();
-                log('  ✓ Scene created');
-                
-                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-                log('  ✓ Camera created');
-                
-                renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-                log('  ✓ Renderer created');
-                
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                log('  ✓ Size set');
-                
-                renderer.xr.enabled = true;
-                log('  ✓ XR enabled');
-                
-                renderer.xr.setFramebufferScaleFactor(1.0);
-                log('  ✓ Framebuffer scale set');
-                
-                document.body.appendChild(renderer.domElement);
-                log('  ✓ Canvas appended');
-                
-                log('✓ Three.js scene created');
-
-                // Lighting
-                const light = new THREE.DirectionalLight(0xffffff, 1);
-                light.position.set(5, 10, 7);
-                scene.add(light);
-                log('✓ Lighting added');
-                
-                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-                scene.add(ambientLight);
-
-                // Set up with provided session
-                log('Setting XR session...');
+                log('Step 1: Clearing old state...');
                 try {
+                    if (renderer && renderer.domElement && renderer.domElement.parentNode) {
+                        renderer.domElement.parentNode.removeChild(renderer.domElement);
+                    }
+                    log('  ✓ State cleared');
+                } catch (e) {
+                    log('  ⚠ Clear state error: ' + e.message);
+                }
+                
+                log('Step 2: Creating Three.js scene...');
+                try {
+                    scene = new THREE.Scene();
+                    log('  ✓ Scene created');
+                } catch (e) {
+                    log('  ✗ Scene failed: ' + e.message);
+                    throw e;
+                }
+                
+                try {
+                    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                    log('  ✓ Camera created');
+                } catch (e) {
+                    log('  ✗ Camera failed: ' + e.message);
+                    throw e;
+                }
+                
+                try {
+                    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                    log('  ✓ Renderer created');
+                } catch (e) {
+                    log('  ✗ Renderer failed: ' + e.message);
+                    throw e;
+                }
+                
+                try {
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                    log('  ✓ Size set (' + window.innerWidth + 'x' + window.innerHeight + ')');
+                } catch (e) {
+                    log('  ✗ Size failed: ' + e.message);
+                    throw e;
+                }
+                
+                try {
+                    renderer.xr.enabled = true;
+                    log('  ✓ XR enabled');
+                } catch (e) {
+                    log('  ✗ XR enable failed: ' + e.message);
+                    throw e;
+                }
+                
+                try {
+                    renderer.xr.setFramebufferScaleFactor(1.0);
+                    log('  ✓ Framebuffer scale set');
+                } catch (e) {
+                    log('  ✗ Framebuffer failed: ' + e.message);
+                    throw e;
+                }
+                
+                try {
+                    document.body.appendChild(renderer.domElement);
+                    log('  ✓ Canvas appended to DOM');
+                } catch (e) {
+                    log('  ✗ Append failed: ' + e.message);
+                    throw e;
+                }
+
+                log('Step 3: Adding lighting...');
+                try {
+                    const light = new THREE.DirectionalLight(0xffffff, 1);
+                    light.position.set(5, 10, 7);
+                    scene.add(light);
+                    log('  ✓ Directional light added');
+                } catch (e) {
+                    log('  ✗ Light failed: ' + e.message);
+                    throw e;
+                }
+                
+                try {
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+                    scene.add(ambientLight);
+                    log('  ✓ Ambient light added');
+                } catch (e) {
+                    log('  ✗ Ambient light failed: ' + e.message);
+                    throw e;
+                }
+
+                log('Step 4: Setting up XR session...');
+                try {
+                    log('  Calling renderer.xr.setSession()...');
                     renderer.xr.setSession(session);
-                    log('✓ XR session set');
+                    log('  ✓ XR session set');
                 } catch (err) {
-                    log('✗ setSession failed: ' + err.message);
+                    log('  ✗ setSession failed: ' + err.message);
+                    console.error('setSession error:', err);
                     throw err;
                 }
 
                 // Try to set up hit testing if available
+                log('Step 5: Setting up hit testing...');
                 let space;
                 try {
-                    log('Requesting reference space...');
+                    log('  Requesting reference space (viewer)...');
                     space = await session.requestReferenceSpace('viewer');
-                    log('✓ Reference space created');
+                    log('  ✓ Reference space created');
                     
-                    log('Requesting hit test source...');
+                    log('  Requesting hit test source...');
                     hitTestSource = await session.requestHitTestSource({ space });
-                    log('✓ Hit test enabled');
+                    log('  ✓ Hit test source created');
                 } catch (err) {
-                    log('⚠ Hit test unavailable: ' + err.message);
+                    log('  ⚠ Hit test setup failed: ' + err.message);
+                    space = null;
+                    hitTestSource = null;
                 }
 
-                // Handle tap for placing models
-                log('Setting up select listener...');
-                session.addEventListener('select', onSelect);
-                log('✓ Select listener added');
+                log('Step 6: Setting up select event listener...');
+                try {
+                    session.addEventListener('select', onSelect);
+                    log('  ✓ Select listener added');
+                } catch (err) {
+                    log('  ✗ Select listener failed: ' + err.message);
+                    throw err;
+                }
 
-                // Start render loop
-                log('Starting render loop...');
+                log('Step 7: Starting animation loop...');
                 try {
                     renderer.xr.setAnimationLoop((time, frame) => {
-                        // Try hit testing if available
                         if (hitTestSource && space) {
-                            const hitTestResults = frame.getHitTestResults(hitTestSource);
-
-                            // Visualize hit test results
-                            if (hitTestResults.length > 0) {
-                                const hit = hitTestResults[0];
-                                const pose = hit.getPose(frame.session.inputSources[0]?.space || space);
-                                
-                                // Store for placement
-                                frame.userData = frame.userData || {};
-                                frame.userData.hitPose = pose;
+                            try {
+                                const hitTestResults = frame.getHitTestResults(hitTestSource);
+                                if (hitTestResults.length > 0) {
+                                    const hit = hitTestResults[0];
+                                    const pose = hit.getPose(frame.session.inputSources[0]?.space || space);
+                                    
+                                    frame.userData = frame.userData || {};
+                                    frame.userData.hitPose = pose;
+                                }
+                            } catch (err) {
+                                console.error('Hit test error in loop:', err);
                             }
                         }
 
-                        renderer.render(scene, camera);
+                        try {
+                            renderer.render(scene, camera);
+                        } catch (err) {
+                            console.error('Render error:', err);
+                        }
                     });
-                    log('✓ Render loop active');
+                    log('  ✓ Animation loop started');
                 } catch (err) {
-                    log('✗ Render loop failed: ' + err.message);
+                    log('  ✗ Animation loop failed: ' + err.message);
                     throw err;
                 }
+                
+                log('✓✓✓ AR INITIALIZATION COMPLETE ✓✓✓');
                 
             } catch (err) {
                 log('ERROR in initAR: ' + err.message);
