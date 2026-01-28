@@ -18,6 +18,7 @@
             overflow: hidden;
             height: 100vh;
             width: 100vw;
+            touch-action: none;
         }
         
         #overlay {
@@ -30,70 +31,76 @@
         }
         
         #header {
-            padding: 16px 20px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            padding: 12px 16px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(0,0,0,0.4), transparent);
             pointer-events: auto;
         }
         
         #header h1 {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
-            letter-spacing: -0.02em;
+            margin-bottom: 8px;
         }
         
         #status {
-            margin-top: 8px;
-            padding: 10px 14px;
-            background: rgba(255,255,255,0.1);
+            padding: 10px 12px;
+            background: rgba(0,0,0,0.6);
             border-radius: 8px;
-            font-size: 13px;
-            line-height: 1.5;
-            backdrop-filter: blur(10px);
-            max-height: 120px;
+            font-size: 11px;
+            line-height: 1.4;
+            font-family: monospace;
+            max-height: 150px;
             overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
         }
         
         #status.error {
-            background: rgba(220, 38, 38, 0.3);
-            border: 1px solid rgba(220, 38, 38, 0.5);
+            background: rgba(220, 38, 38, 0.4);
+            border: 1px solid rgba(220, 38, 38, 0.6);
         }
         
         #status.success {
-            background: rgba(34, 197, 94, 0.2);
-            border: 1px solid rgba(34, 197, 94, 0.4);
+            background: rgba(34, 197, 94, 0.3);
+            border: 1px solid rgba(34, 197, 94, 0.5);
         }
         
         #controls {
             margin-top: auto;
-            padding: 20px;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 16px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.6), transparent);
             pointer-events: auto;
         }
         
         .btn-row {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        
+        .btn-row:last-child {
+            margin-bottom: 0;
         }
         
         .btn {
             flex: 1;
-            min-width: 80px;
-            padding: 14px 16px;
+            min-width: 70px;
+            padding: 12px 10px;
             border: none;
-            border-radius: 12px;
-            font-size: 14px;
+            border-radius: 10px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         .btn:disabled {
-            opacity: 0.4;
+            opacity: 0.35;
             cursor: not-allowed;
         }
         
@@ -103,18 +110,21 @@
         }
         
         .btn-primary:not(:disabled):active {
-            transform: scale(0.97);
-            background: linear-gradient(135deg, #2563eb, #1e40af);
+            transform: scale(0.96);
         }
         
         .btn-secondary {
             background: rgba(255,255,255,0.15);
             color: white;
-            backdrop-filter: blur(10px);
         }
         
         .btn-secondary:not(:disabled):active {
-            background: rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
         }
         
         .btn-danger {
@@ -135,38 +145,44 @@
             align-items: center;
             justify-content: center;
             z-index: 200;
-            padding: 40px;
+            padding: 30px;
             text-align: center;
         }
         
         #startScreen h1 {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         
         #startScreen p {
             color: rgba(255,255,255,0.7);
-            margin-bottom: 30px;
-            max-width: 300px;
-            line-height: 1.6;
+            margin-bottom: 24px;
+            max-width: 280px;
+            line-height: 1.5;
+            font-size: 14px;
         }
         
         #startScreen .btn {
-            width: 200px;
-            padding: 18px 24px;
-            font-size: 16px;
+            width: 100%;
+            max-width: 260px;
+            padding: 16px 20px;
+            font-size: 15px;
+            margin-bottom: 10px;
         }
         
         #deviceInfo {
-            margin-top: 30px;
-            padding: 16px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            font-size: 12px;
-            color: rgba(255,255,255,0.5);
+            margin-top: 20px;
+            padding: 14px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 10px;
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
             text-align: left;
-            max-width: 300px;
+            width: 100%;
+            max-width: 280px;
+            font-family: monospace;
+            line-height: 1.5;
         }
         
         .hidden {
@@ -176,32 +192,65 @@
         canvas {
             position: fixed;
             inset: 0;
+            touch-action: none;
         }
         
-        /* Reticle indicator when not in AR */
-        #reticleIndicator {
+        #crosshair {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            border: 2px solid rgba(255,255,255,0.5);
-            border-radius: 50%;
+            width: 40px;
+            height: 40px;
             pointer-events: none;
             z-index: 50;
+            opacity: 0.7;
         }
         
-        #reticleIndicator::before {
+        #crosshair::before,
+        #crosshair::after {
             content: '';
             position: absolute;
+            background: white;
+            border-radius: 2px;
+        }
+        
+        #crosshair::before {
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            transform: translateY(-50%);
+        }
+        
+        #crosshair::after {
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            transform: translateX(-50%);
+        }
+        
+        #modeIndicator {
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 8px;
-            height: 8px;
-            background: white;
-            border-radius: 50%;
+            padding: 20px 30px;
+            background: rgba(0,0,0,0.8);
+            border-radius: 12px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 150;
+            pointer-events: none;
+        }
+        
+        #modeIndicator.fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+        
+        @keyframes fadeOut {
+            to { opacity: 0; }
         }
     </style>
 </head>
@@ -209,12 +258,24 @@
     <!-- Start Screen -->
     <div id="startScreen">
         <h1>🔮 AR Model Viewer</h1>
-        <p>Place 3D models in your real environment using augmented reality</p>
-        <button class="btn btn-primary" id="startBtn">
-            <span>Start AR Session</span>
+        <p>Place 3D models in augmented reality or use 3D preview mode</p>
+        
+        <button class="btn btn-primary" id="startARBtn">
+            📱 Start AR Session
         </button>
-        <div id="deviceInfo"></div>
+        
+        <button class="btn btn-secondary" id="start3DBtn">
+            🖥️ 3D Preview Mode
+        </button>
+        
+        <div id="deviceInfo">Checking device...</div>
     </div>
+    
+    <!-- Mode indicator -->
+    <div id="modeIndicator" class="hidden"></div>
+    
+    <!-- Crosshair for 3D mode -->
+    <div id="crosshair" class="hidden"></div>
     
     <!-- AR Overlay UI -->
     <div id="overlay" class="hidden">
@@ -224,26 +285,36 @@
         </div>
         
         <div id="controls">
-            <div class="btn-row" style="margin-bottom: 10px;">
-                <button class="btn btn-primary" id="loadBtn" disabled>
-                    📁 Load Model
+            <div class="btn-row">
+                <button class="btn btn-success" id="useCubeBtn">
+                    🎁 Use Demo Cube
                 </button>
-                <button class="btn btn-secondary" id="scaleUpBtn" disabled>
-                    ➕ Scale Up
-                </button>
-                <button class="btn btn-secondary" id="scaleDownBtn" disabled>
-                    ➖ Scale Down
+                <button class="btn btn-primary" id="loadBtn">
+                    📁 Load GLB/GLTF
                 </button>
             </div>
             <div class="btn-row">
+                <button class="btn btn-secondary" id="placeBtn" disabled>
+                    📍 Place Model
+                </button>
                 <button class="btn btn-secondary" id="rotateBtn" disabled>
                     🔄 Rotate
+                </button>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-secondary" id="scaleUpBtn" disabled>
+                    ➕ Bigger
+                </button>
+                <button class="btn btn-secondary" id="scaleDownBtn" disabled>
+                    ➖ Smaller
                 </button>
                 <button class="btn btn-secondary" id="removeBtn" disabled>
                     🗑️ Remove
                 </button>
+            </div>
+            <div class="btn-row">
                 <button class="btn btn-danger" id="exitBtn">
-                    ✕ Exit AR
+                    ✕ Exit
                 </button>
             </div>
         </div>
@@ -251,7 +322,6 @@
     
     <input type="file" id="fileInput" accept=".glb,.gltf">
 
-    <!-- Import maps for Three.js modules -->
     <script type="importmap">
     {
         "imports": {
@@ -264,11 +334,12 @@
     <script type="module">
         import * as THREE from 'three';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         
         // ============================================
         // STATE
         // ============================================
-        let renderer, scene, camera;
+        let renderer, scene, camera, controls;
         let xrSession = null;
         let xrRefSpace = null;
         let xrHitTestSource = null;
@@ -278,8 +349,10 @@
         
         let loadedModel = null;
         let placedModels = [];
-        let selectedModel = null;
         let modelScale = 0.3;
+        
+        let isARMode = false;
+        let is3DMode = false;
         
         const gltfLoader = new GLTFLoader();
         
@@ -287,17 +360,22 @@
         // DOM ELEMENTS
         // ============================================
         const startScreen = document.getElementById('startScreen');
-        const startBtn = document.getElementById('startBtn');
+        const startARBtn = document.getElementById('startARBtn');
+        const start3DBtn = document.getElementById('start3DBtn');
         const overlay = document.getElementById('overlay');
         const status = document.getElementById('status');
         const deviceInfo = document.getElementById('deviceInfo');
         const fileInput = document.getElementById('fileInput');
         const loadBtn = document.getElementById('loadBtn');
+        const useCubeBtn = document.getElementById('useCubeBtn');
+        const placeBtn = document.getElementById('placeBtn');
         const rotateBtn = document.getElementById('rotateBtn');
         const removeBtn = document.getElementById('removeBtn');
         const exitBtn = document.getElementById('exitBtn');
         const scaleUpBtn = document.getElementById('scaleUpBtn');
         const scaleDownBtn = document.getElementById('scaleDownBtn');
+        const crosshair = document.getElementById('crosshair');
+        const modeIndicator = document.getElementById('modeIndicator');
         
         // ============================================
         // LOGGING
@@ -309,13 +387,21 @@
             logs.push(entry);
             console.log(entry);
             
-            // Keep last 6 entries
-            const displayLogs = logs.slice(-6);
+            const displayLogs = logs.slice(-8);
             status.textContent = displayLogs.join('\n');
             
             status.classList.remove('error', 'success');
             if (type === 'error') status.classList.add('error');
             if (type === 'success') status.classList.add('success');
+        }
+        
+        function showModeIndicator(text, duration = 2000) {
+            modeIndicator.textContent = text;
+            modeIndicator.classList.remove('hidden', 'fade-out');
+            setTimeout(() => {
+                modeIndicator.classList.add('fade-out');
+                setTimeout(() => modeIndicator.classList.add('hidden'), 500);
+            }, duration);
         }
         
         // ============================================
@@ -325,13 +411,21 @@
             const info = [];
             
             info.push(`Platform: ${navigator.platform}`);
-            info.push(`User Agent: ${navigator.userAgent.substring(0, 50)}...`);
+            
+            const ua = navigator.userAgent;
+            let browser = 'Unknown';
+            if (ua.includes('Chrome')) browser = 'Chrome';
+            else if (ua.includes('Firefox')) browser = 'Firefox';
+            else if (ua.includes('Safari')) browser = 'Safari';
+            info.push(`Browser: ${browser}`);
             
             if (!navigator.xr) {
                 info.push('❌ WebXR: NOT AVAILABLE');
+                info.push('');
+                info.push('Use "3D Preview Mode" instead');
                 deviceInfo.innerHTML = info.join('<br>');
-                startBtn.disabled = true;
-                startBtn.textContent = 'WebXR Not Supported';
+                startARBtn.disabled = true;
+                startARBtn.innerHTML = '❌ AR Not Available';
                 return false;
             }
             
@@ -339,15 +433,18 @@
             
             try {
                 const arSupported = await navigator.xr.isSessionSupported('immersive-ar');
-                info.push(arSupported ? '✅ AR Mode: Supported' : '❌ AR Mode: Not Supported');
-                
-                if (!arSupported) {
-                    startBtn.disabled = true;
-                    startBtn.textContent = 'AR Not Supported';
+                if (arSupported) {
+                    info.push('✅ AR Mode: Supported');
+                } else {
+                    info.push('❌ AR Mode: Not Supported');
+                    info.push('');
+                    info.push('Use "3D Preview Mode" instead');
+                    startARBtn.disabled = true;
+                    startARBtn.innerHTML = '❌ AR Not Supported';
                 }
             } catch (e) {
-                info.push(`❌ AR Check Failed: ${e.message}`);
-                startBtn.disabled = true;
+                info.push(`❌ AR Check Error: ${e.message}`);
+                startARBtn.disabled = true;
             }
             
             deviceInfo.innerHTML = info.join('<br>');
@@ -357,12 +454,18 @@
         // ============================================
         // THREE.JS SETUP
         // ============================================
-        function initThreeJS() {
+        function initThreeJS(forAR = false) {
             // Scene
             scene = new THREE.Scene();
+            if (!forAR) {
+                scene.background = new THREE.Color(0x1a1a2e);
+            }
             
-            // Camera (will be controlled by XR)
+            // Camera
             camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 100);
+            if (!forAR) {
+                camera.position.set(0, 1.5, 3);
+            }
             
             // Renderer
             renderer = new THREE.WebGLRenderer({ 
@@ -372,9 +475,17 @@
             });
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.xr.enabled = true;
             renderer.outputEncoding = THREE.sRGBEncoding;
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            
+            if (forAR) {
+                renderer.xr.enabled = true;
+            }
+            
+            // Remove old canvas if exists
+            const oldCanvas = document.querySelector('canvas');
+            if (oldCanvas) oldCanvas.remove();
+            
             document.body.insertBefore(renderer.domElement, document.body.firstChild);
             
             // Lighting
@@ -383,21 +494,33 @@
             
             const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
             directionalLight.position.set(5, 10, 7);
-            directionalLight.castShadow = true;
             scene.add(directionalLight);
             
-            // Hemisphere light for better outdoor feel
             const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.6);
             scene.add(hemiLight);
             
-            // Create reticle (placement indicator)
-            createReticle();
+            // Add ground plane for 3D mode
+            if (!forAR) {
+                const gridHelper = new THREE.GridHelper(10, 20, 0x444444, 0x222222);
+                scene.add(gridHelper);
+                
+                // Orbit controls
+                controls = new OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                controls.dampingFactor = 0.05;
+                controls.target.set(0, 0, 0);
+            }
             
-            log('Three.js initialized', 'success');
+            // Create reticle for AR
+            if (forAR) {
+                createReticle();
+            }
+            
+            log('Three.js initialized');
         }
         
         function createReticle() {
-            const geometry = new THREE.RingGeometry(0.05, 0.07, 32);
+            const geometry = new THREE.RingGeometry(0.06, 0.08, 32);
             geometry.rotateX(-Math.PI / 2);
             
             const material = new THREE.MeshBasicMaterial({
@@ -412,8 +535,8 @@
             reticle.matrixAutoUpdate = false;
             scene.add(reticle);
             
-            // Add inner dot
-            const dotGeometry = new THREE.CircleGeometry(0.015, 16);
+            // Inner dot
+            const dotGeometry = new THREE.CircleGeometry(0.02, 16);
             dotGeometry.rotateX(-Math.PI / 2);
             const dotMaterial = new THREE.MeshBasicMaterial({ 
                 color: 0x00ff88,
@@ -426,44 +549,82 @@
         }
         
         // ============================================
+        // CREATE DEMO CUBE
+        // ============================================
+        function createDemoCube() {
+            const group = new THREE.Group();
+            
+            // Main cube
+            const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0x4488ff,
+                metalness: 0.3,
+                roughness: 0.4
+            });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.position.y = 0.1;
+            group.add(cube);
+            
+            // Add colored edges
+            const edges = new THREE.EdgesGeometry(geometry);
+            const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ffff });
+            const wireframe = new THREE.LineSegments(edges, lineMaterial);
+            wireframe.position.y = 0.1;
+            group.add(wireframe);
+            
+            loadedModel = group;
+            log('✅ Demo cube ready - tap Place Model', 'success');
+            placeBtn.disabled = false;
+        }
+        
+        // ============================================
         // AR SESSION
         // ============================================
         async function startAR() {
-            log('Starting AR session...');
+            log('Requesting AR session...');
             
             try {
-                // Request AR session with hit-test and DOM overlay
+                initThreeJS(true);
+                
+                // Request AR session
                 const sessionInit = {
                     requiredFeatures: ['hit-test'],
                     optionalFeatures: ['dom-overlay', 'local-floor'],
                     domOverlay: { root: overlay }
                 };
                 
+                log('Calling requestSession...');
                 xrSession = await navigator.xr.requestSession('immersive-ar', sessionInit);
-                log('AR session created');
+                log('✅ AR session created!', 'success');
                 
-                // Set up session
+                isARMode = true;
+                
                 xrSession.addEventListener('end', onSessionEnd);
                 
-                // Set up renderer for XR
+                // Set up renderer
                 await renderer.xr.setSession(xrSession);
+                log('Renderer XR session set');
                 
                 // Get reference space
                 try {
                     xrRefSpace = await xrSession.requestReferenceSpace('local-floor');
-                    log('Using local-floor reference space');
+                    log('Using local-floor space');
                 } catch (e) {
                     xrRefSpace = await xrSession.requestReferenceSpace('local');
-                    log('Using local reference space (fallback)');
+                    log('Using local space (fallback)');
                 }
                 
                 // Set up hit testing
-                const viewerSpace = await xrSession.requestReferenceSpace('viewer');
-                xrHitTestSource = await xrSession.requestHitTestSource({ space: viewerSpace });
-                log('Hit test source ready', 'success');
+                try {
+                    const viewerSpace = await xrSession.requestReferenceSpace('viewer');
+                    xrHitTestSource = await xrSession.requestHitTestSource({ space: viewerSpace });
+                    log('✅ Hit-test ready', 'success');
+                } catch (e) {
+                    log('⚠️ Hit-test failed: ' + e.message, 'error');
+                }
                 
-                // Handle select (tap) events
-                xrSession.addEventListener('select', onSelect);
+                // Handle select events
+                xrSession.addEventListener('select', onARSelect);
                 
                 // Start render loop
                 renderer.setAnimationLoop(onXRFrame);
@@ -471,32 +632,79 @@
                 // Update UI
                 startScreen.classList.add('hidden');
                 overlay.classList.remove('hidden');
-                enableControls(true);
                 
-                log('✅ AR Ready - Load a model to place', 'success');
+                showModeIndicator('AR Mode Active\nPoint camera at floor');
+                log('🎯 Point at a surface, then Place', 'success');
                 
             } catch (err) {
-                log(`AR Error: ${err.message}`, 'error');
-                console.error('Full AR error:', err);
+                log(`❌ AR Error: ${err.message}`, 'error');
+                console.error('Full error:', err);
+                
+                // Show detailed error
+                if (err.name === 'NotSupportedError') {
+                    log('AR not supported on this device/browser', 'error');
+                } else if (err.name === 'SecurityError') {
+                    log('AR requires HTTPS', 'error');
+                }
             }
         }
         
+        // ============================================
+        // 3D PREVIEW MODE
+        // ============================================
+        function start3DMode() {
+            log('Starting 3D Preview Mode...');
+            
+            initThreeJS(false);
+            
+            is3DMode = true;
+            
+            // Start render loop
+            function animate() {
+                requestAnimationFrame(animate);
+                if (controls) controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
+            
+            // Update UI
+            startScreen.classList.add('hidden');
+            overlay.classList.remove('hidden');
+            crosshair.classList.remove('hidden');
+            placeBtn.textContent = '📍 Place at Center';
+            
+            showModeIndicator('3D Preview Mode\nUse touch to orbit');
+            log('✅ 3D mode ready', 'success');
+        }
+        
+        // ============================================
+        // SESSION END
+        // ============================================
         function onSessionEnd() {
-            log('AR session ended');
+            log('Session ended');
             xrSession = null;
             xrHitTestSource = null;
             xrRefSpace = null;
+            isARMode = false;
+            is3DMode = false;
             
             startScreen.classList.remove('hidden');
             overlay.classList.add('hidden');
-            enableControls(false);
+            crosshair.classList.add('hidden');
             
             renderer.setAnimationLoop(null);
+            
+            // Reset state
+            loadedModel = null;
+            placedModels = [];
+            placeBtn.disabled = true;
         }
         
-        function exitAR() {
+        function exitSession() {
             if (xrSession) {
                 xrSession.end();
+            } else {
+                onSessionEnd();
             }
         }
         
@@ -506,58 +714,78 @@
         function onXRFrame(time, frame) {
             if (!frame) return;
             
-            const session = frame.session;
-            
             // Update hit test
-            if (xrHitTestSource) {
+            if (xrHitTestSource && xrRefSpace) {
                 const hitTestResults = frame.getHitTestResults(xrHitTestSource);
                 
                 if (hitTestResults.length > 0) {
                     const hit = hitTestResults[0];
                     const pose = hit.getPose(xrRefSpace);
                     
-                    if (pose) {
+                    if (pose && reticle) {
                         reticle.visible = true;
                         reticle.matrix.fromArray(pose.transform.matrix);
                         reticleVisible = true;
                     }
                 } else {
-                    reticle.visible = false;
+                    if (reticle) reticle.visible = false;
                     reticleVisible = false;
                 }
             }
             
-            // Render
             renderer.render(scene, camera);
         }
         
         // ============================================
         // MODEL PLACEMENT
         // ============================================
-        function onSelect(event) {
+        function onARSelect(event) {
+            // This fires when user taps in AR
+            log('Screen tap detected');
+            
+            if (loadedModel && reticleVisible) {
+                placeModelAtReticle();
+            }
+        }
+        
+        function placeModel() {
             if (!loadedModel) {
                 log('Load a model first!');
                 return;
             }
             
-            if (!reticleVisible) {
-                log('Point at a surface to place');
-                return;
+            if (isARMode) {
+                if (!reticleVisible) {
+                    log('Point at a surface first');
+                    return;
+                }
+                placeModelAtReticle();
+            } else {
+                // 3D mode - place at center
+                placeModelAt3DCenter();
             }
-            
-            // Clone the loaded model
+        }
+        
+        function placeModelAtReticle() {
             const clone = loadedModel.clone();
-            
-            // Position at reticle location
             clone.position.setFromMatrixPosition(reticle.matrix);
-            clone.quaternion.setFromRotationMatrix(reticle.matrix);
             
-            // Add to scene
             scene.add(clone);
             placedModels.push(clone);
-            selectedModel = clone;
             
-            log(`Model placed! (${placedModels.length} total)`, 'success');
+            log(`✅ Placed! (${placedModels.length} total)`, 'success');
+            updateControlButtons();
+        }
+        
+        function placeModelAt3DCenter() {
+            const clone = loadedModel.clone();
+            clone.position.set(0, 0, 0);
+            
+            scene.add(clone);
+            placedModels.push(clone);
+            
+            log(`✅ Placed! (${placedModels.length} total)`, 'success');
+            updateControlButtons();
         }
         
         // ============================================
@@ -573,114 +801,93 @@
                 
                 const model = gltf.scene;
                 
-                // Calculate bounding box and normalize scale
+                // Normalize scale
                 const box = new THREE.Box3().setFromObject(model);
                 const size = box.getSize(new THREE.Vector3());
                 const center = box.getCenter(new THREE.Vector3());
                 
-                // Normalize to fit within modelScale
                 const maxDim = Math.max(size.x, size.y, size.z);
                 const scale = modelScale / maxDim;
                 model.scale.setScalar(scale);
                 
-                // Center the model at origin
+                // Center and ground
                 model.position.set(
                     -center.x * scale,
-                    -box.min.y * scale, // Place on ground
+                    -box.min.y * scale,
                     -center.z * scale
                 );
                 
-                // Apply shadows
-                model.traverse((child) => {
-                    if (child.isMesh) {
-                        child.castShadow = true;
-                        child.receiveShadow = true;
-                    }
-                });
-                
-                // Wrap in a group for easier manipulation
+                // Wrap in group
                 const wrapper = new THREE.Group();
                 wrapper.add(model);
                 
                 loadedModel = wrapper;
                 
-                log(`✅ "${file.name}" loaded - Tap to place`, 'success');
+                log(`✅ "${file.name}" loaded`, 'success');
+                placeBtn.disabled = false;
                 
             } catch (err) {
-                log(`Failed to load: ${err.message}`, 'error');
-                console.error('Model load error:', err);
+                log(`❌ Load failed: ${err.message}`, 'error');
             }
         }
         
         // ============================================
         // MODEL MANIPULATION
         // ============================================
-        function rotateSelected() {
-            if (placedModels.length === 0) {
-                log('No models to rotate');
-                return;
-            }
-            
+        function rotateLastModel() {
+            if (placedModels.length === 0) return;
             const model = placedModels[placedModels.length - 1];
             model.rotation.y += Math.PI / 4;
             log('Rotated 45°');
         }
         
-        function removeSelected() {
-            if (placedModels.length === 0) {
-                log('No models to remove');
-                return;
-            }
-            
+        function removeLastModel() {
+            if (placedModels.length === 0) return;
             const model = placedModels.pop();
             scene.remove(model);
-            log(`Removed model (${placedModels.length} remaining)`);
+            log(`Removed (${placedModels.length} left)`);
+            updateControlButtons();
         }
         
         function scaleUp() {
             modelScale = Math.min(modelScale * 1.5, 2.0);
             log(`Scale: ${(modelScale * 100).toFixed(0)}%`);
-            if (loadedModel) {
-                const factor = 1.5;
-                loadedModel.scale.multiplyScalar(factor);
-            }
+            if (loadedModel) loadedModel.scale.multiplyScalar(1.5);
         }
         
         function scaleDown() {
             modelScale = Math.max(modelScale / 1.5, 0.05);
             log(`Scale: ${(modelScale * 100).toFixed(0)}%`);
-            if (loadedModel) {
-                const factor = 1 / 1.5;
-                loadedModel.scale.multiplyScalar(factor);
-            }
+            if (loadedModel) loadedModel.scale.multiplyScalar(1/1.5);
         }
         
-        // ============================================
-        // UI HELPERS
-        // ============================================
-        function enableControls(enabled) {
-            loadBtn.disabled = !enabled;
-            rotateBtn.disabled = !enabled;
-            removeBtn.disabled = !enabled;
-            scaleUpBtn.disabled = !enabled;
-            scaleDownBtn.disabled = !enabled;
+        function updateControlButtons() {
+            const hasPlaced = placedModels.length > 0;
+            rotateBtn.disabled = !hasPlaced;
+            removeBtn.disabled = !hasPlaced;
+            scaleUpBtn.disabled = !loadedModel;
+            scaleDownBtn.disabled = !loadedModel;
         }
         
         // ============================================
         // EVENT LISTENERS
         // ============================================
-        startBtn.addEventListener('click', startAR);
-        exitBtn.addEventListener('click', exitAR);
+        startARBtn.addEventListener('click', startAR);
+        start3DBtn.addEventListener('click', start3DMode);
+        exitBtn.addEventListener('click', exitSession);
+        
+        useCubeBtn.addEventListener('click', createDemoCube);
         loadBtn.addEventListener('click', () => fileInput.click());
-        rotateBtn.addEventListener('click', rotateSelected);
-        removeBtn.addEventListener('click', removeSelected);
+        placeBtn.addEventListener('click', placeModel);
+        rotateBtn.addEventListener('click', rotateLastModel);
+        removeBtn.addEventListener('click', removeLastModel);
         scaleUpBtn.addEventListener('click', scaleUp);
         scaleDownBtn.addEventListener('click', scaleDown);
         
         fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) loadModel(file);
-            fileInput.value = ''; // Reset for re-upload
+            fileInput.value = '';
         });
         
         window.addEventListener('resize', () => {
@@ -694,12 +901,7 @@
         // ============================================
         // INIT
         // ============================================
-        async function init() {
-            await checkXRSupport();
-            initThreeJS();
-        }
-        
-        init();
+        checkXRSupport();
     </script>
 </body>
 </html>
